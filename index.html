@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Global Code</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #111;
+      color: #fff;
+      text-align: center;
+      padding-top: 100px;
+    }
+    #code {
+      font-size: 5em;
+      margin-bottom: 20px;
+      letter-spacing: 10px;
+    }
+    #timer {
+      font-size: 2em;
+      color: #0f0;
+    }
+    .placeholder {
+      color: #888;
+      font-size: 1em;
+      margin-bottom: 40px;
+    }
+  </style>
+</head>
+<body>
+  <!-- Placeholder text you can edit easily -->
+  <div class="placeholder" id="headline">Current Code</div>
+  <div id="code">------</div>
+  <div class="placeholder" id="subtext">Valid for X seconds</div>
+
+  <script>
+    async function update() {
+      try {
+        const r = await fetch("/code");
+        const data = await r.json();
+        document.getElementById("code").innerText = data.code;
+        document.getElementById("subtext").innerText = "Valid for " + data.validFor + " seconds";
+      } catch (err) {
+        document.getElementById("subtext").innerText = "Error loading code";
+      }
+    }
+
+    update();
+    setInterval(update, 1000);
+  </script>
+</body>
+</html>
