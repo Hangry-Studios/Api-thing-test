@@ -16,35 +16,47 @@
       margin-bottom: 20px;
       letter-spacing: 10px;
     }
+    .placeholder {
+      color: #888; /* default color for editable placeholders */
+      font-size: 1em;
+      margin-bottom: 40px;
+    }
     #timer {
       font-size: 2em;
       color: #0f0;
     }
-    .placeholder {
-      color: #888;
-      font-size: 1em;
-      margin-bottom: 40px;
-    }
   </style>
 </head>
 <body>
-  <!-- Placeholder text you can edit easily -->
-  <div class="placeholder" id="headline">Current Code</div>
+  <!-- Headline placeholder -->
+  <div id="headline" class="placeholder" data-text="Current Code">Current Code</div>
+
+  <!-- Code -->
   <div id="code">------</div>
-  <div class="placeholder" id="subtext">Valid for X seconds</div>
+
+  <!-- Subtext placeholder -->
+  <div id="subtext" class="placeholder" data-text="Valid for">Valid for</div>
 
   <script>
     async function update() {
       try {
-        const r = await fetch("/code");
-        const data = await r.json();
+        const response = await fetch("/code");
+        const data = await response.json();
+
+        // Update the code
         document.getElementById("code").innerText = data.code;
-        document.getElementById("subtext").innerText = "Valid for " + data.validFor + " seconds";
+
+        // Update subtext using placeholder text
+        const subtext = document.getElementById("subtext");
+        const baseText = subtext.getAttribute("data-text") || "";
+        subtext.innerText = baseText + " " + data.validFor + " seconds";
+
       } catch (err) {
         document.getElementById("subtext").innerText = "Error loading code";
       }
     }
 
+    // Initial update and repeat every second
     update();
     setInterval(update, 1000);
   </script>
