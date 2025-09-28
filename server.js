@@ -5,7 +5,7 @@ const app = express();
 const SECRET = process.env.SECRET || "replace-with-random-secret"; 
 
 function generateCode() {
-  const timeStep = 30; // new code every 30s
+  const timeStep = 30;
   const counter = Math.floor(Date.now() / 1000 / timeStep);
 
   const hmac = crypto.createHmac("sha1", SECRET);
@@ -23,4 +23,6 @@ app.get("/code", (req, res) => {
   res.json({ code, validFor: remaining });
 });
 
-app.listen(3000, () => console.log("Server running on port 3000"));
+// IMPORTANT: use process.env.PORT
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
